@@ -145,6 +145,22 @@ def add_user():
     # add name into table
     return redirect(url_for('login'))
 
+   
+@app.route("/reset/<id>", methods = ['POST', 'GET'])
+def resetPassword(id):
+    current_pw = request.form.get('currentpassword')
+    new_password = request.form.get('newpassword')
+    user_collection = mongo.db.Users
+    query = { "public_id" : id }
+    
+    user = user_collection.find_one(query, {'password': 1} )
+    password_b64 = user['password']
+    
+    if check_password(password, password_b64)
+      hashed_pw = get_hashed_password(new_password)
+      new = { "$set": { "password": hashed_pw } }
+      user_collection.update_one(query, new)
+
 
 @app.route("/setSchedule/<id>",methods =['POST', 'GET'])
 def setSchedule(id):
