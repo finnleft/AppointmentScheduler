@@ -146,14 +146,15 @@ def add_user():
     return redirect(url_for('login'))
 
    
-@app.route("/reset/<id>", methods = ['POST', 'GET'])
+@app.route("/reset", methods = ['POST', 'GET'])
 def resetPassword(id):
+    username = request.form.get('username')
     current_pw = request.form.get('currentpassword')
     new_password = request.form.get('newpassword')
     user_collection = mongo.db.Users
-    query = { "public_id" : id }
+    query = { "username" : username }
     
-    user = user_collection.find_one(query, {'password': 1} )
+    user = user_collection.find_one(query)
     password_b64 = user['password']
     
     if check_password(password, password_b64)
